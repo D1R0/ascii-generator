@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixels</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas1">
+        </canvas>
+            <div class="controls">
+                <label for="resolution" id="resolutionLabel">Resolution 5 px</label>
+                <input type="range" id="resolution" name="resolution" min="1" max="30" value="5">
+                <input type="number" id="scale" value="1">
+            </div>
+            <div>
+                <input type="file" name="" id="" onchange="handleImageUpload(event)">
+                <button onclick="exportCanvasAsImage(canvas)"> Export png</button>
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+    <p id="exportText"></p>
+</body>
+</html>

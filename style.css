@@ -1,0 +1,37 @@
+@font-face {
+    font-family: 'BankGothicMdBTMedium';
+    src: url('bankgthd-webfont.eot');
+    src: local('BankGothic Md BT'), local('BankGothicBTMedium'), url('bankgthd-webfont.woff') format('woff'), url('bankgthd-webfont.ttf') format('truetype'), url('bankgthd-webfont.svg#webfontNgZtDOtM') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+html, body {
+    width:  100%;
+    height: 100%;
+    margin: 0;
+    background-color: black;
+  }
+.container {
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%,-50%); 
+}
+
+#canvas1{
+    min-height: 100%;
+    border: 5px solid whitesmoke;
+
+}
+.controls {
+text-align: center;
+}
+.controls > input {
+ width: 100%;
+ margin-top: 15px;
+}
+.controls > label{
+    width: 30%;
+    color: white;
+    font-size: 15px;
+}
