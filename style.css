@@ -20,8 +20,8 @@ html, body {
 
 #canvas1{
     min-height: 100%;
-    border: 5px solid whitesmoke;
-
+    border: 2px solid whitesmoke;
+    max-width: 500px;
 }
 .controls {
 text-align: center;
