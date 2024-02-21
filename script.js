@@ -7,9 +7,11 @@ src =
 const inputSlider = document.getElementById("resolution");
 const inputScale = document.getElementById("scale");
 const inputBrightness = document.getElementById("brightness");
-
+const selectAlphabet = document.getElementById("alphabet");
+console.log(selectAlphabet);
 const inputLabel = document.getElementById("resolutionLabel");
 inputSlider.addEventListener("change", handlerSlider);
+selectAlphabet.addEventListener("change", handleAlphabet);
 inputScale.addEventListener("change", handlerScale);
 inputBrightness.addEventListener("change", handlerBrightness);
 
@@ -38,6 +40,7 @@ class AsciiEffect {
   #height;
   hueRotationAdjustment;
   saturationAdjustment;
+  alphabetTypece;
   constructor(
     ctx,
     width,
@@ -45,7 +48,8 @@ class AsciiEffect {
     image1,
     brightnessAdjustment = 1,
     hueRotationAdjustment = 300,
-    saturationAdjustment = 1
+    saturationAdjustment = 1,
+    alphabetType = "latin"
   ) {
     this.#ctx = ctx;
     this.#width = width;
@@ -53,6 +57,7 @@ class AsciiEffect {
     this.hueRotationAdjustment = +hueRotationAdjustment;
     this.#brightnessAdjustment = +brightnessAdjustment;
     this.saturationAdjustment = +saturationAdjustment;
+    this.alphabetType = alphabetType;
     this.#ctx.drawImage(image1, 0, 0, this.#width, this.#height);
     this.#pixels = this.#ctx.getImageData(0, 0, this.#width, this.#height);
   }
@@ -74,7 +79,8 @@ class AsciiEffect {
         const adjustedBlue = Math.min(255, blue + this.#brightnessAdjustment);
         if (alpha > 200 && total > 80) {
           const symbol = this.convertToSymbol(
-            (adjustedRed + adjustedGreen + adjustedBlue) / 3
+            (adjustedRed + adjustedGreen + adjustedBlue) / 3,
+            this.alphabetType
           );
           const color = `rgb(${adjustedRed}, ${adjustedGreen}, ${adjustedBlue})`;
           // const color = `rgb(255,255,255)`;
@@ -97,6 +103,9 @@ class AsciiEffect {
   }
   setBrightnessAdjustment(value) {
     this.brightnessAdjustment = value;
+  }
+  setAlphabet(value) {
+    this.alphabetType = value;
   }
   hueRotate(color, degrees) {
     const rgb = color.match(/\d+/g).map(Number);
@@ -139,15 +148,27 @@ class AsciiEffect {
 
     return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
   }
-  convertToSymbol(g) {
-    const density = "$@B%8&WM#*oahkbzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
-    // const density =
-    // "的一是不了人我在有他这个上们来到时大地为子中你说生国年着就那和要她出也得里后自以会家可下而过天去能对小多然于心学么之都好看起发当没成只如事把还用第样道想作种开美总从无情己面最女但现前些所同日手又行意动方期它头经长儿回位分爱老因很给名法间斯知世什两次使身者被高已亲其进此话常与活正感见明问力理尔点文几定本公特做外孩相西果准先真再力果准先真再字其从此开飞呢转更单跟加无记处队因找立手场马管意王快决音找其着政步强由更保证南造百规热领且八谈统引历则首心六量城际光今直题那感国消器张信见新说军很感表接条队身安排件车维";
+  convertToSymbol(g, alphabetType) {
+    if (alphabetType === "latin") {
+      const density = "$@B%8&WM#*oahkbzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
 
-    let max = 255;
-    g = g > 254 ? 254 : g;
-    let charaterIndex = Math.floor((((g * 100) / max) * density.length) / 100);
-    return density[density.length - charaterIndex - 1];
+      let max = 255;
+      g = g > 254 ? 254 : g;
+      let charaterIndex = Math.floor(
+        (((g * 100) / max) * density.length) / 100
+      );
+      return density[density.length - charaterIndex - 1];
+    } else {
+      const density =
+        "的一是不了人我在有他这个上们来到时大地为子中你说生国年着就那和要她出也得里后自以会家可下而过天去能对小多然于心学么之都好看起发当没成只如事把还用第样道想作种开美总从无情己面最女但现前些所同日手又行意动方期它头经长儿回位分爱老因很给名法间斯知世什两次使身者被高已亲其进此话常与活正感见明问力理尔点文几定本公特做外孩相西果准先真再力果准先真再字其从此开飞呢转更单跟加无记处队因找立手场马管意王快决音找其着政步强由更保证南造百规热领且八谈统引历则首心六量城际光今直题那感国消器张信见新说军很感表接条队身安排件车维";
+
+      let max = 255;
+      g = g > 254 ? 254 : g;
+      let charaterIndex = Math.floor(
+        (((g * 100) / max) * density.length) / 100
+      );
+      return density[density.length - charaterIndex - 1];
+    }
   }
   drawAsscii() {
     this.#ctx.clearRect(0, 0, this.#width, this.#height);
@@ -200,6 +221,10 @@ function handlerSlider() {
 function handlerScale() {
   asciiImage(src, inputScale.value, inputBrightness.value);
 }
+
+function handleAlphabet() {
+  asciiImage(src, inputScale.value, inputBrightness.value);
+}
 function handlerBrightness() {
   asciiImage(src, inputScale.value, inputBrightness.value);
 }
@@ -209,6 +234,7 @@ function asciiImage(src, imgSizeMultiplier, brightnessAdjustment) {
   image1.onload = function initialize() {
     canvas.width = image1.width * imgSizeMultiplier;
     canvas.height = image1.height * imgSizeMultiplier;
+    console.log(selectAlphabet.value);
     effect = new AsciiEffect(
       ctx,
       image1.width * imgSizeMultiplier,
@@ -216,6 +242,8 @@ function asciiImage(src, imgSizeMultiplier, brightnessAdjustment) {
       image1,
       brightnessAdjustment
     );
+    effect.setAlphabet(selectAlphabet.value);
+
     effect.draw(+inputSlider.value);
   };
 }
